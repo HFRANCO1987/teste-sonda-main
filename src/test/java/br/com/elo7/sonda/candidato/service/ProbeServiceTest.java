@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import br.com.elo7.sonda.candidato.model.Probe;
 
+
 @SpringBootTest
 public class ProbeServiceTest {
 	
