@@ -6,6 +6,13 @@ public class ProbeDTO {
 	private String direction;
 	private String commands;
 
+	public ProbeDTO() {
+	}
+
+	public ProbeDTO(String commands) {
+		this.commands = commands;
+	}
+
 	public int getX() {
 		return x;
 	}

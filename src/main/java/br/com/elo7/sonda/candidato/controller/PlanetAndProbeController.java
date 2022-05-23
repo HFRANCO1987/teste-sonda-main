@@ -29,4 +29,5 @@ public class PlanetAndProbeController {
     public ResponseEntity<List<Probe>> register(@RequestBody InputDTO inputDto) {
 		return ResponseEntity.ok(probeService.landProbes(inputDto));        
     }
+
 }

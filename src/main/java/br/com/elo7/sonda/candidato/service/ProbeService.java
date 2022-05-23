@@ -15,10 +15,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProbeService {
-	@Autowired
+
 	private Planets planets;
-	@Autowired
 	private Probes probes;
+
+	public ProbeService(Planets planets, Probes probes) {
+		this.planets = planets;
+		this.probes = probes;
+	}
 
 	/***
 	 * TODO - PENDENCIAS
@@ -42,6 +46,13 @@ public class ProbeService {
 		
 		return convertedProbes;
 	}
+
+	/**
+	 * TODO - Escrever teste para o metodo de conversão e movimentaçao de sonda
+	 * @param input
+	 * @param planet
+	 * @return
+	 */
 	private List<Probe> convertAndMoveProbes(InputDTO input, Planet planet) {
 		return input.getProbes()
 						.stream().map(probeDto -> {
@@ -51,7 +62,7 @@ public class ProbeService {
 						}).collect(Collectors.toList());
 	}
 
-	private void moveProbeWithAllCommands(Probe probe, ProbeDTO probeDTO) {
+	public void moveProbeWithAllCommands(Probe probe, ProbeDTO probeDTO) {
 		for (char command : probeDTO.getCommands().toCharArray()) {
 			CommandEnum.getCommandEnum(String.valueOf(command)).applyCommandToProbe(probe);
 		}
