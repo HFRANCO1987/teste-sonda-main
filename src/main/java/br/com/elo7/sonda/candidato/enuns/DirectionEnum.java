@@ -1,6 +1,7 @@
 package br.com.elo7.sonda.candidato.enuns;
 
 import br.com.elo7.sonda.candidato.model.Probe;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum DirectionEnum {
 
@@ -11,11 +12,7 @@ public enum DirectionEnum {
         };
         @Override
         void turnProbe(Probe probe, CommandEnum commandEnum) {
-            if (CommandEnum.LEFT.equals(commandEnum)){
-                probe.newDirection(DirectionEnum.WEST);
-            }else{
-                probe.newDirection(DirectionEnum.EAST);
-            }
+            probe.newDirection(CommandEnum.LEFT.equals(commandEnum) ? DirectionEnum.WEST : DirectionEnum.EAST);
         }
     },
 
@@ -26,12 +23,7 @@ public enum DirectionEnum {
         };
         @Override
         void turnProbe(Probe probe, CommandEnum commandEnum) {
-            if (CommandEnum.LEFT.equals(commandEnum)){
-                probe.newDirection(DirectionEnum.NORTH);
-            }else{
-                probe.newDirection(DirectionEnum.SOUTH);
-            }
-
+            probe.newDirection(CommandEnum.LEFT.equals(commandEnum) ? DirectionEnum.NORTH : DirectionEnum.SOUTH);
         }
     },
 
@@ -42,11 +34,7 @@ public enum DirectionEnum {
         };
         @Override
         void turnProbe(Probe probe, CommandEnum commandEnum) {
-            if (CommandEnum.LEFT.equals(commandEnum)){
-                probe.newDirection(DirectionEnum.EAST);
-            }else{
-                probe.newDirection(DirectionEnum.WEST);
-            }
+            probe.newDirection(CommandEnum.LEFT.equals(commandEnum) ? DirectionEnum.EAST : DirectionEnum.WEST);
         }
     },
 
@@ -57,11 +45,7 @@ public enum DirectionEnum {
         };
         @Override
         void turnProbe(Probe probe, CommandEnum commandEnum) {
-            if (CommandEnum.LEFT.equals(commandEnum)){
-                probe.newDirection(DirectionEnum.SOUTH);
-            }else{
-                probe.newDirection(DirectionEnum.NORTH);
-            }
+            probe.newDirection(CommandEnum.LEFT.equals(commandEnum) ? DirectionEnum.SOUTH : DirectionEnum.NORTH);
         }
     };
 
@@ -77,9 +61,10 @@ public enum DirectionEnum {
                 return directionEnum;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Direction invalid!");
     }
 
+    @JsonValue
     public char getDirection() {
         return direction;
     }

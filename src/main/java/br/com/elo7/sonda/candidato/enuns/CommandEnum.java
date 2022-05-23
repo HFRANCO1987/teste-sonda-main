@@ -35,7 +35,7 @@ public enum CommandEnum {
                 return commandEnum;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Command invalid!");
     }
 
     public abstract void applyCommandToProbe(Probe probe);
