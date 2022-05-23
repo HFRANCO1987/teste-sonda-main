@@ -1,11 +1,16 @@
 package br.com.elo7.sonda.candidato.service;
 
+import br.com.elo7.sonda.candidato.dto.InputDTO;
 import br.com.elo7.sonda.candidato.dto.ProbeDTO;
 import br.com.elo7.sonda.candidato.enuns.DirectionEnum;
+import br.com.elo7.sonda.candidato.exceptions.ServiceException;
 import br.com.elo7.sonda.candidato.model.Probe;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,7 +19,7 @@ public class ProbeServiceTest {
 	
 	@Autowired
 	private ProbeService subject;
-	
+
 	@Test
 	public void should_change_probe_direction_from_N_To_W_when_receive_the_command_L() {
 		Probe probe = new Probe(DirectionEnum.NORTH);
@@ -105,5 +110,85 @@ public class ProbeServiceTest {
 		assertEquals(2, probe.getX());
 		assertEquals(1, probe.getY());
 		assertEquals('E', probe.getDirection().getDirection());
+	}
+
+	/**
+	 * TODO - Escrever assinatura dos metodos em ingles
+	 */
+	@Test
+	public void deveValidarSeProbeEstaNulo() {
+		InputDTO inputDTO = new InputDTO();
+		try{
+			subject.landProbes(inputDTO);
+		}catch (NullPointerException e){
+		}
+	}
+
+	@Test
+	public void deveValidarSeProbeEstaVazio() {
+		try{
+			InputDTO inputDTO = new InputDTO();
+			inputDTO.setProbes(new ArrayList<>());
+			subject.landProbes(inputDTO);
+		}catch (ServiceException serviceException){
+			assertEquals("Nenhum Probe informada para posicionamento!", serviceException.getValidationError().getMsg());
+		}
+	}
+
+	@Test
+	public void deveValidarSeDirecaoDoProbeEstaVazio() {
+		try{
+			InputDTO inputDTO = new InputDTO();
+			ProbeDTO probeDTO = new ProbeDTO();
+			inputDTO.setProbes(new ArrayList<>());
+			inputDTO.getProbes().add(probeDTO);
+			subject.landProbes(inputDTO);
+		}catch (ServiceException serviceException){
+			assertEquals("Direção é um campo obrigatório!", serviceException.getValidationError().getMsg());
+		}
+	}
+
+	@Test
+	public void deveValidarSeDirecaoDoProbeEhInvalida() {
+		ProbeDTO probeDTO = new ProbeDTO();
+		try{
+			InputDTO inputDTO = new InputDTO();
+			inputDTO.setProbes(new ArrayList<>());
+			probeDTO.setDirection("H");
+			inputDTO.getProbes().add(probeDTO);
+			subject.landProbes(inputDTO);
+		}catch (ServiceException serviceException){
+			assertEquals(probeDTO.getDirection() + " é uma direção inválida", serviceException.getValidationError().getMsg());
+		}
+	}
+
+	@Test
+	public void deveValidarSeComandoDoProbeEstaVazio() {
+		try{
+			InputDTO inputDTO = new InputDTO();
+			ProbeDTO probeDTO = new ProbeDTO();
+			inputDTO.setProbes(new ArrayList<>());
+			probeDTO.setDirection("N");
+			inputDTO.getProbes().add(probeDTO);
+			subject.landProbes(inputDTO);
+		}catch (ServiceException serviceException){
+			assertEquals("Comando é um campo obrigatório!", serviceException.getValidationError().getMsg());
+		}
+	}
+
+
+	@Test
+	public void deveValidarSeComandoDoProbeEhInvalida() {
+		ProbeDTO probeDTO = new ProbeDTO();
+		try{
+			InputDTO inputDTO = new InputDTO();
+			inputDTO.setProbes(new ArrayList<>());
+			probeDTO.setDirection("N");
+			probeDTO.setCommands("LMRMMH");
+			inputDTO.getProbes().add(probeDTO);
+			subject.landProbes(inputDTO);
+		}catch (ServiceException serviceException){
+			assertEquals("H" + " é um comando inválido", serviceException.getValidationError().getMsg());
+		}
 	}
 }

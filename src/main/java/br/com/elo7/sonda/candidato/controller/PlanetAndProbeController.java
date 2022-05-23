@@ -17,8 +17,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/planet-with-probes")
 public class PlanetAndProbeController {
-	@Autowired
 	private ProbeService probeService;
+
+	public PlanetAndProbeController(ProbeService probeService) {
+		this.probeService = probeService;
+	}
 
 	/**
 	 * TODO - Verificar possíveis falhas nas requisições e tratar status
@@ -27,7 +30,7 @@ public class PlanetAndProbeController {
 	 */
 	@PostMapping
     public ResponseEntity<List<Probe>> register(@RequestBody InputDTO inputDto) {
-		return ResponseEntity.ok(probeService.landProbes(inputDto));        
+		return ResponseEntity.ok(probeService.landProbes(inputDto));
     }
 
 }
