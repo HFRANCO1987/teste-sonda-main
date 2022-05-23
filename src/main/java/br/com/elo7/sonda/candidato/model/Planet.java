@@ -1,6 +1,6 @@
 package br.com.elo7.sonda.candidato.model;
 
-import br.com.elo7.sonda.candidato.dto.InputDTO;
+import br.com.elo7.sonda.candidato.controller.request.PlanetaRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Data
 @EqualsAndHashCode(of = "id")
 public class Planet {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -19,13 +20,11 @@ public class Planet {
     private int width;
     @Column(name = "height")
     private int height;
-
     public Planet() {
     }
-
-    public Planet(InputDTO inputDTO) {
-        this.width = inputDTO.getWidth();
-        this.height = inputDTO.getHeight();
+    public Planet(PlanetaRequest planetaRequest) {
+        this.width = planetaRequest.getWidth();
+        this.height = planetaRequest.getHeight();
     }
 
 }

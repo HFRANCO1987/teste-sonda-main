@@ -1,6 +1,6 @@
 package br.com.elo7.sonda.candidato.model;
 
-import br.com.elo7.sonda.candidato.dto.ProbeDTO;
+import br.com.elo7.sonda.candidato.controller.request.ProbeRequest;
 import br.com.elo7.sonda.candidato.enuns.DirectionEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,20 +17,20 @@ public class Probe {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-
     @Column(name = "x")
     private int x;
     @Column(name = "y")
     private int y;
-
     @Enumerated(EnumType.STRING)
     private DirectionEnum direction;
-
     @ManyToOne
     @JoinColumn(name = "id_planet")
     private Planet planet;
 
-    public Probe(ProbeDTO probeDto, Planet planet) {
+    public Probe() {
+    }
+
+    public Probe(ProbeRequest probeDto, Planet planet) {
         this.planet = planet;
         this.x = probeDto.getX();
         this.y = probeDto.getY();

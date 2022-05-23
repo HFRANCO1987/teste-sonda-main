@@ -1,18 +1,23 @@
-package br.com.elo7.sonda.candidato.dto;
+package br.com.elo7.sonda.candidato.controller.request;
 
-public class ProbeDTO {
+import javax.persistence.Transient;
+
+public class ProbeRequest {
 	private int x; 
 	private int y;
 	private String direction;
 	private String commands;
 
-	public ProbeDTO() {
+	@Transient
+	private Boolean isCollision;
+
+	public ProbeRequest() {
+		this.isCollision = Boolean.FALSE;
 	}
 
-	public ProbeDTO(String commands) {
+	public ProbeRequest(String commands) {
 		this.commands = commands;
 	}
-
 	public int getX() {
 		return x;
 	}
@@ -36,5 +41,13 @@ public class ProbeDTO {
 	}
 	public void setCommands(String commands) {
 		this.commands = commands;
+	}
+
+	public Boolean getCollision() {
+		return isCollision;
+	}
+
+	public void setCollision(Boolean collision) {
+		isCollision = collision;
 	}
 }
