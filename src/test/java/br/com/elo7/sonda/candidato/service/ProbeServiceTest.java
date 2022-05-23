@@ -24,56 +24,56 @@ public class ProbeServiceTest {
 	public void should_change_probe_direction_from_N_To_W_when_receive_the_command_L() {
 		Probe probe = new Probe(DirectionEnum.NORTH);
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("L"));
-		assertEquals('W', probe.getDirection().getDirection());
+		assertEquals("W", probe.getDirection().getDirection());
 	}
 	
 	@Test
 	public void should_change_probe_direction_from_W_To_S_when_receive_the_command_L() {
 		Probe probe = new Probe(DirectionEnum.WEST);
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("L"));
-		assertEquals('S', probe.getDirection().getDirection());
+		assertEquals("S", probe.getDirection().getDirection());
 	}
 
 	@Test
 	public void should_change_probe_direction_from_S_To_E_when_receive_the_command_L() {
 		Probe probe = new Probe(DirectionEnum.SOUTH);
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("L"));
-		assertEquals('E', probe.getDirection().getDirection());
+		assertEquals("E", probe.getDirection().getDirection());
 	}
 
 	@Test
 	public void should_change_probe_direction_from_E_To_N_when_receive_the_command_L() {
 		Probe probe = new Probe(DirectionEnum.EAST);
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("L"));
-		assertEquals('N', probe.getDirection().getDirection());
+		assertEquals("N", probe.getDirection().getDirection());
 	}
 
 	@Test
 	public void should_change_probe_direction_from_N_To_E_when_receive_the_command_R() {
 		Probe probe = new Probe(DirectionEnum.NORTH);
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("R"));
-		assertEquals('E', probe.getDirection().getDirection());
+		assertEquals("E", probe.getDirection().getDirection());
 	}
 
 	@Test
 	public void should_change_probe_direction_from_E_To_S_when_receive_the_command_R() {
 		Probe probe = new Probe(DirectionEnum.EAST);
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("R"));
-		assertEquals('S', probe.getDirection().getDirection());
+		assertEquals("S", probe.getDirection().getDirection());
 	}
 
 	@Test
 	public void should_change_probe_direction_from_S_To_W_when_receive_the_command_R() {
 		Probe probe = new Probe(DirectionEnum.SOUTH);
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("R"));
-		assertEquals('W', probe.getDirection().getDirection());
+		assertEquals("W", probe.getDirection().getDirection());
 	}
 
 	@Test
 	public void should_change_probe_direction_from_W_To_N_when_receive_the_command_R() {
 		Probe probe = new Probe(DirectionEnum.WEST);
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("R"));
-		assertEquals('N', probe.getDirection().getDirection());
+		assertEquals("N", probe.getDirection().getDirection());
 	}
 
 	@Test
@@ -82,7 +82,7 @@ public class ProbeServiceTest {
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("M"));
 		assertEquals(2, probe.getY());
 		assertEquals(1, probe.getX());
-		assertEquals('N', probe.getDirection().getDirection());
+		assertEquals("N", probe.getDirection().getDirection());
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class ProbeServiceTest {
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("M"));
 		assertEquals(0, probe.getY());
 		assertEquals(1, probe.getX());
-		assertEquals('S', probe.getDirection().getDirection());
+		assertEquals("S", probe.getDirection().getDirection());
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class ProbeServiceTest {
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("M"));
 		assertEquals(0, probe.getX());
 		assertEquals(1, probe.getY());
-		assertEquals('W', probe.getDirection().getDirection());
+		assertEquals("W", probe.getDirection().getDirection());
 	}
 
 	@Test
@@ -109,14 +109,11 @@ public class ProbeServiceTest {
 		subject.moveProbeWithAllCommands(probe, new ProbeDTO("M"));
 		assertEquals(2, probe.getX());
 		assertEquals(1, probe.getY());
-		assertEquals('E', probe.getDirection().getDirection());
+		assertEquals("E", probe.getDirection().getDirection());
 	}
 
-	/**
-	 * TODO - Escrever assinatura dos metodos em ingles
-	 */
 	@Test
-	public void deveValidarSeProbeEstaNulo() {
+	public void should_validate_if_probe_is_null() {
 		InputDTO inputDTO = new InputDTO();
 		try{
 			subject.landProbes(inputDTO);
@@ -125,7 +122,7 @@ public class ProbeServiceTest {
 	}
 
 	@Test
-	public void deveValidarSeProbeEstaVazio() {
+	public void should_validate_if_probe_is_empty() {
 		try{
 			InputDTO inputDTO = new InputDTO();
 			inputDTO.setProbes(new ArrayList<>());
@@ -149,7 +146,7 @@ public class ProbeServiceTest {
 	}
 
 	@Test
-	public void deveValidarSeDirecaoDoProbeEhInvalida() {
+	public void should_validate_if_direction_probe_is_invalid() {
 		ProbeDTO probeDTO = new ProbeDTO();
 		try{
 			InputDTO inputDTO = new InputDTO();
@@ -163,7 +160,7 @@ public class ProbeServiceTest {
 	}
 
 	@Test
-	public void deveValidarSeComandoDoProbeEstaVazio() {
+	public void should_validate_if_command_probe_is_empty() {
 		try{
 			InputDTO inputDTO = new InputDTO();
 			ProbeDTO probeDTO = new ProbeDTO();
@@ -178,7 +175,7 @@ public class ProbeServiceTest {
 
 
 	@Test
-	public void deveValidarSeComandoDoProbeEhInvalida() {
+	public void should_validate_if_command_probe_is_invalid() {
 		ProbeDTO probeDTO = new ProbeDTO();
 		try{
 			InputDTO inputDTO = new InputDTO();

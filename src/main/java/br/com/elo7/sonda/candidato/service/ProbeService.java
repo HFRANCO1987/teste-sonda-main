@@ -10,6 +10,8 @@ import br.com.elo7.sonda.candidato.model.Planet;
 import br.com.elo7.sonda.candidato.model.Probe;
 import br.com.elo7.sonda.candidato.persistence.Planets;
 import br.com.elo7.sonda.candidato.persistence.Probes;
+import br.com.elo7.sonda.candidato.utils.MessageUtil;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +25,12 @@ public class ProbeService {
 	private Planets planets;
 	private Probes probes;
 
-	public ProbeService(Planets planets, Probes probes) {
+	private MessageUtil messageUtil;
+
+	public ProbeService(Planets planets, Probes probes, MessageUtil messageUtil) {
 		this.planets = planets;
 		this.probes = probes;
+		this.messageUtil = messageUtil;
 	}
 
 	/***
@@ -52,7 +57,7 @@ public class ProbeService {
 
 	private void validProbes(InputDTO input) {
 		if (input.getProbes().isEmpty())
-			throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), "Probe", "Nenhum Probe informada para posicionamento!"));
+			throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), "Probe", messageUtil.getMessage("probe.is_empty")));
 
 		validateInputDirection(input);
 
@@ -61,13 +66,13 @@ public class ProbeService {
 
 	private void validateInputCommand(InputDTO input) {
 		if (input.getProbes().stream().filter(probe -> probe.getCommands() == null || probe.getCommands().isEmpty()).count() > 0)
-			throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), "Command", "Comando é um campo obrigatório!"));
+			throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), messageUtil.getMessage("command.label"), messageUtil.getMessage("command.required")));
 
 		List<String> listCommands = Stream.of(CommandEnum.values()).map(CommandEnum::getCommand).collect(Collectors.toList());
 		for (ProbeDTO probeDTO : input.getProbes()){
 			for (char command : probeDTO.getCommands().toCharArray()) {
 				if (!listCommands.contains(String.valueOf(command))){
-					throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), "Command", command + " é um comando inválido"));
+					throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), messageUtil.getMessage("command.label"), messageUtil.getMessage("command.label") + messageUtil.getMessage("command.required")));
 				}
 			}
 		}
@@ -75,12 +80,12 @@ public class ProbeService {
 
 	private void validateInputDirection(InputDTO input) {
 		if (input.getProbes().stream().filter(probe -> probe.getDirection() == null || probe.getDirection().isEmpty()).count() > 0)
-			throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), "Direção", "Direção é um campo obrigatório!"));
+			throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), messageUtil.getMessage("direction.label"), messageUtil.getMessage("direction.required")));
 
 		List<String> listDirections = Stream.of(DirectionEnum.values()).map(DirectionEnum::getDirection).collect(Collectors.toList());
 		for (ProbeDTO probeDTO : input.getProbes()){
 			if (!listDirections.contains(String.valueOf(probeDTO.getDirection()))){
-				throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), "Direction", probeDTO.getDirection() + " é uma direção inválida"));
+				throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), messageUtil.getMessage("direction.label"), probeDTO.getDirection() + messageUtil.getMessage("direction.invalid")));
 			}
 		}
 	}
