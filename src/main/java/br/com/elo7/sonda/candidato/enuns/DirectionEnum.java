@@ -65,8 +65,8 @@ public enum DirectionEnum {
     }
 
     @JsonValue
-    public char getDirection() {
-        return direction;
+    public String getDirection() {
+        return String.valueOf(direction);
     }
 
     abstract void moveProbeForward(Probe probe);

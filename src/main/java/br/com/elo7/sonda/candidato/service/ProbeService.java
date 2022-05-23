@@ -34,6 +34,8 @@ public class ProbeService {
 	 * @return
 	 */
 	public List<Probe> landProbes(InputDTO input) {
+		this.validProbes(input);
+
 		Planet planet = new Planet(input);
 		planets.save(planet);
 		
@@ -44,6 +46,25 @@ public class ProbeService {
 		convertedProbes.forEach(probe -> probes.save(probe));
 		
 		return convertedProbes;
+	}
+
+	private void validProbes(InputDTO input) {
+		if (input.getProbes().isEmpty())
+			throw new IllegalArgumentException("Nenhuma Probe informada para posicionamento");
+
+		validateInputDirection(input);
+
+		validateInputCommand(input);
+	}
+
+	//Escrever testes
+	private void validateInputCommand(InputDTO input) {
+		//implementar regras de validação
+	}
+
+	//Escrever testes
+	private void validateInputDirection(InputDTO input) {
+		//implementar regras de validação
 	}
 
 	/**

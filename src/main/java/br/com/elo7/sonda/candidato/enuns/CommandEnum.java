@@ -38,5 +38,9 @@ public enum CommandEnum {
         throw new IllegalArgumentException("Command invalid!");
     }
 
+    public String getCommand() {
+        return command;
+    }
+
     public abstract void applyCommandToProbe(Probe probe);
 }
