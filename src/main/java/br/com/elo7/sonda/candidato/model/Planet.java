@@ -1,10 +1,17 @@
 package br.com.elo7.sonda.candidato.model;
 
+import br.com.elo7.sonda.candidato.dto.InputDTO;
+
 public class Planet {
 	private int id;
 	private int width;
 	private int height;
-	
+
+	public Planet(InputDTO inputDTO) {
+		this.width = inputDTO.getWidth();
+		this.height = inputDTO.getHeight();
+	}
+
 	@Override
 	public int hashCode() {
 		return id;

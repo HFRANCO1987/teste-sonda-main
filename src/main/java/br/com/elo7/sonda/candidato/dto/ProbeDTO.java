@@ -3,7 +3,7 @@ package br.com.elo7.sonda.candidato.dto;
 public class ProbeDTO {
 	private int x; 
 	private int y;
-	private char direction;
+	private String direction;
 	private String commands;
 
 	public int getX() {
@@ -18,10 +18,10 @@ public class ProbeDTO {
 	public void setY(int y) {
 		this.y = y;
 	}
-	public char getDirection() {
+	public String getDirection() {
 		return direction;
 	}
-	public void setDirection(char direction) {
+	public void setDirection(String direction) {
 		this.direction = direction;
 	}
 	public String getCommands() {
