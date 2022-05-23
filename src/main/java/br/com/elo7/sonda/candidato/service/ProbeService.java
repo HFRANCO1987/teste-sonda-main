@@ -7,7 +7,6 @@ import br.com.elo7.sonda.candidato.model.Planet;
 import br.com.elo7.sonda.candidato.model.Probe;
 import br.com.elo7.sonda.candidato.persistence.Planets;
 import br.com.elo7.sonda.candidato.persistence.Probes;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

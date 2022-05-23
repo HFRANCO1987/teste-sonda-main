@@ -1,46 +1,31 @@
 package br.com.elo7.sonda.candidato.model;
 
 import br.com.elo7.sonda.candidato.dto.InputDTO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "planet")
+@Data
+@EqualsAndHashCode(of = "id")
 public class Planet {
-	private int id;
-	private int width;
-	private int height;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+    @Column(name = "width")
+    private int width;
+    @Column(name = "height")
+    private int height;
 
-	public Planet(InputDTO inputDTO) {
-		this.width = inputDTO.getWidth();
-		this.height = inputDTO.getHeight();
-	}
+    public Planet() {
+    }
 
-	@Override
-	public int hashCode() {
-		return id;
-	}
+    public Planet(InputDTO inputDTO) {
+        this.width = inputDTO.getWidth();
+        this.height = inputDTO.getHeight();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Planet) {
-			return ((Planet) obj).id == this.id;
-		}
-		return false;
-	}
-
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public int getWidth() {
-		return width;
-	}
-	public void setWidth(int width) {
-		this.width = width;
-	}
-	public int getHeight() {
-		return height;
-	}
-	public void setHeight(int height) {
-		this.height = height;
-	}
 }

@@ -8,7 +8,6 @@ public class SevenMarsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SevenMarsApplication.class, args);
-		
 	}
 
 }

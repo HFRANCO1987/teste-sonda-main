@@ -1,13 +1,16 @@
 package br.com.elo7.sonda.candidato.persistence;
 
+import br.com.elo7.sonda.candidato.model.Probe;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
-import br.com.elo7.sonda.candidato.model.Probe;
+@Repository
+public interface Probes extends CrudRepository<Probe, Long> {
 
-public interface Probes {
+    Probe save(Probe probe);
 
-	void save(Probe probe);
-
-	Optional<Probe> findById(int id);
+    Optional<Probe> findById(int id);
 
 }

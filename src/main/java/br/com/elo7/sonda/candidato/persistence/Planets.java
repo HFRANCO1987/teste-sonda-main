@@ -1,13 +1,16 @@
 package br.com.elo7.sonda.candidato.persistence;
 
+import br.com.elo7.sonda.candidato.model.Planet;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
-import br.com.elo7.sonda.candidato.model.Planet;
+@Repository
+public interface Planets extends CrudRepository<Planet, Long> {
 
-public interface Planets {
+    Planet save(Planet planet);
 
-	void save(Planet planet);
-
-	Optional<Planet> findById(int id);
+    Optional<Planet> findById(int id);
 
 }
