@@ -20,6 +20,7 @@ public class SevenMarsApplication {
 
 		messageSource.setBasename("classpath:messages");
 		messageSource.setDefaultEncoding("UTF-8");
+		messageSource.setCacheSeconds(1);
 		return messageSource;
 	}
 

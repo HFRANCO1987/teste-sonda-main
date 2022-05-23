@@ -155,7 +155,7 @@ public class ProbeServiceTest {
 			inputDTO.getProbes().add(probeDTO);
 			subject.landProbes(inputDTO);
 		}catch (ServiceException serviceException){
-			assertEquals(probeDTO.getDirection() + " é uma direção inválida", serviceException.getValidationError().getMsg());
+			assertEquals(probeDTO.getDirection() + " é uma direção invalida!", serviceException.getValidationError().getMsg());
 		}
 	}
 
@@ -185,7 +185,7 @@ public class ProbeServiceTest {
 			inputDTO.getProbes().add(probeDTO);
 			subject.landProbes(inputDTO);
 		}catch (ServiceException serviceException){
-			assertEquals("H" + " é um comando inválido", serviceException.getValidationError().getMsg());
+			assertEquals("H" + " é um comando invalido!", serviceException.getValidationError().getMsg());
 		}
 	}
 }

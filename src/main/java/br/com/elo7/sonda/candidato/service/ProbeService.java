@@ -72,7 +72,7 @@ public class ProbeService {
 		for (ProbeDTO probeDTO : input.getProbes()){
 			for (char command : probeDTO.getCommands().toCharArray()) {
 				if (!listCommands.contains(String.valueOf(command))){
-					throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), messageUtil.getMessage("command.label"), messageUtil.getMessage("command.label") + messageUtil.getMessage("command.required")));
+					throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), messageUtil.getMessage("command.label"), String.valueOf(command).concat(" ").concat(messageUtil.getMessage("command.invalid"))));
 				}
 			}
 		}
@@ -85,7 +85,7 @@ public class ProbeService {
 		List<String> listDirections = Stream.of(DirectionEnum.values()).map(DirectionEnum::getDirection).collect(Collectors.toList());
 		for (ProbeDTO probeDTO : input.getProbes()){
 			if (!listDirections.contains(String.valueOf(probeDTO.getDirection()))){
-				throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), messageUtil.getMessage("direction.label"), probeDTO.getDirection() + messageUtil.getMessage("direction.invalid")));
+				throw new ServiceException(new ValidationError(HttpStatus.BAD_REQUEST.value(), messageUtil.getMessage("direction.label"), probeDTO.getDirection().concat(" ").concat(messageUtil.getMessage("direction.invalid"))));
 			}
 		}
 	}
