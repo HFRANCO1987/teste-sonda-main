@@ -19,12 +19,25 @@ public class ProbeService {
 	private Planets planets;
 	@Autowired
 	private Probes probes;
-	
+
+	/***
+	 * TODO - PENDENCIAS
+	 * I - Valida tamanho da sonda;
+	 * II - Valida possível colisão devido ao preenchimento da posição
+	 * III - Valida informações de direção e rotas inexistentes ou invalidas;
+	 *
+	 *
+	 * @param input
+	 * @return
+	 */
 	public List<Probe> landProbes(InputDTO input) {
 		Planet planet = new Planet(input);
 		planets.save(planet);
 		
 		List<Probe> convertedProbes = convertAndMoveProbes(input, planet);
+		/**
+		 * TODO - Verificar melhor forma de persistir
+		 */
 		convertedProbes.forEach(probe -> probes.save(probe));
 		
 		return convertedProbes;
@@ -32,7 +45,7 @@ public class ProbeService {
 	private List<Probe> convertAndMoveProbes(InputDTO input, Planet planet) {
 		return input.getProbes()
 						.stream().map(probeDto -> {
-							Probe probe = convertProbe(probeDto, planet);
+							Probe probe = new Probe(probeDto, planet);
 							moveProbeWithAllCommands(probe, probeDto);
 							return probe;
 						}).collect(Collectors.toList());
@@ -43,9 +56,5 @@ public class ProbeService {
 			CommandEnum.getCommandEnum(String.valueOf(command)).applyCommandToProbe(probe);
 		}
 	}
-	
-	private Probe convertProbe(ProbeDTO probeDto, Planet planet) {
-		return new Probe(probeDto, planet);
-	}
-	
+
 }
