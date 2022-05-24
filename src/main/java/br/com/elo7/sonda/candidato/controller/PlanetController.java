@@ -1,8 +1,7 @@
 package br.com.elo7.sonda.candidato.controller;
 
-import br.com.elo7.sonda.candidato.aspect.LogRequest;
-import br.com.elo7.sonda.candidato.controller.response.PlanetResponse;
 import br.com.elo7.sonda.candidato.controller.request.PlanetaRequest;
+import br.com.elo7.sonda.candidato.controller.response.PlanetResponse;
 import br.com.elo7.sonda.candidato.exceptions.StandardError;
 import br.com.elo7.sonda.candidato.exceptions.ValidationError;
 import br.com.elo7.sonda.candidato.service.PlanetService;
@@ -31,7 +30,6 @@ public class PlanetController {
         this.planetService = planetService;
     }
 
-    @LogRequest
     @Operation(description = "API para criar um planeta")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Retorna OK para planeta e sonda criada.",

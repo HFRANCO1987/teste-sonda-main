@@ -21,9 +21,9 @@ public class ProbeService {
 	private PlanetService planetService;
 	private ProbeRepository probeRepository;
 
-	private ProbeValidation probeValidation;
+	private ProbeServiceValidation probeValidation;
 
-	public ProbeService(PlanetService planetService, ProbeRepository probeRepository, ProbeValidation probeValidation) {
+	public ProbeService(PlanetService planetService, ProbeRepository probeRepository, ProbeServiceValidation probeValidation) {
 		this.planetService = planetService;
 		this.probeRepository = probeRepository;
 		this.probeValidation = probeValidation;

@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class ProbeValidation {
+public class ProbeServiceValidation {
 
     private ProbeRepository probeRepository;
     private MessageUtil messageUtil;
 
-    public ProbeValidation(ProbeRepository probeRepository, MessageUtil messageUtil) {
+    public ProbeServiceValidation(ProbeRepository probeRepository, MessageUtil messageUtil) {
         this.probeRepository = probeRepository;
         this.messageUtil = messageUtil;
     }

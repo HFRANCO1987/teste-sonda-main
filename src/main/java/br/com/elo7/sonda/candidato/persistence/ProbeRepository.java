@@ -12,8 +12,6 @@ public interface ProbeRepository extends JpaRepository<Probe, Long> {
 
     Probe save(Probe probe);
 
-    Optional<Probe> findById(int id);
-
     Optional<Probe> findByPlanetIdAndXAndYAndDirection(Long idPlanet, int x, int y, DirectionEnum direction);
 
 }

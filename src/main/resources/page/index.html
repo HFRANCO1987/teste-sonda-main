@@ -1,0 +1,253 @@
+<html>
+<head>
+    <title>Sonda Front</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/sweetalert2@7.12.10/dist/sweetalert2.all.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#enviarComando").click(function () {
+
+                if ($("#width").val() == "" || $("#height").val() == "") {
+                    swal({
+                        title: 'Atenção!',
+                        text: 'Campos width e height são obrigatórios!',
+                        type: 'warning'
+                    })
+                    return;
+                }
+
+                if ($("#posicaox").val() == "" || $("#posicaoy").val() == "" || $("#comando").val() == "") {
+                    swal({
+                        title: 'Atenção!',
+                        text: 'Posição x, y e comando são obrigatórios!',
+                        type: 'warning'
+                    })
+                    return;
+                }
+
+                var planeta = {
+                    x: $("#posicaox").val(),
+                    y: $("#posicaoy").val(),
+                    direction: $("#direcao").val(),
+                    commands: $("#comando").val()
+                }
+
+                var probes = [];
+                probes.push(planeta);
+
+                var dados = {
+                    planet: {
+                        width: $("#width").val(),
+                        height: $("#height").val()
+                    },
+                    probes: probes
+                };
+
+                $.ajax({
+                    url: "http://localhost:8080/planet-with-probes",
+                    type: "POST",
+                    data: JSON.stringify(dados),
+                    dataType: "json",
+                    contentType: "application/json",
+                    error: function (res) {
+                        console.log(res);
+                        switch (res.status) {
+                            case 400:
+                                swal({
+                                    title: 'Atenção!',
+                                    text: res.responseJSON.msg,
+                                    type: 'warning'
+                                })
+                                break;
+
+                            case 409:
+                                swal({
+                                    title: 'Atenção!',
+                                    text: res.responseJSON.msg,
+                                    type: 'warning'
+                                })
+                                break;
+
+                            case 500:
+                                swal({
+                                    title: 'Atenção!',
+                                    text: "Ocorreu um erro interno no servidor!",
+                                    type: 'error'
+                                })
+                                break;
+                        }
+                    },
+                    success: function (res) {
+                        console.log(res);
+
+                        if (res.length > 0) {
+                            for (var i = 0; i <= res.length - 1; i++) {
+                                console.log("gerar dados");
+
+                                if ($("#tb-body > tr").length == 0) {
+                                    console.log("gerar dados");
+                                    $("#tb-body-n").empty();
+                                    $("#tb-body-s").empty();
+
+                                    var addPontoCentral = "<tr>"
+                                    for (var i = dados.planet.width; i >= 1; i--) {
+                                        addPontoCentral += `
+									                  <td style="background-color: green; width: 50px; height: 50px; text-align: center; vertical-align: middle;"><strong id="W${i}">W${i}</strong></td>
+													`;
+                                    }
+
+                                    addPontoCentral += `
+														<td style="background-color: green; width: 50px; height: 50px; text-align: center; vertical-align: middle;"><strong id="PC">P0</strong></td>`;
+
+
+                                    for (var i = 1; i <= dados.planet.width; i++) {
+                                        addPontoCentral += `
+									                  <td style='background-color: green; width: 50px; height: 50px; text-align: center; vertical-align: middle;'><strong id='E${i}'>E${i}</strong></td>
+													`;
+                                    }
+                                    addPontoCentral += "</tr>"
+                                    $("#ponto-central").append(addPontoCentral);
+
+
+                                    for (var i = dados.planet.height; i >= 1; i--) {
+                                        $("#tb-body-n").append(`
+													 <tr>
+													 <td colspan="${dados.planet.width}">
+									                  <td style="background-color: green; width: 50px; height: 50px; text-align: center; vertical-align: middle;"><strong id="N${i}">N${i}</strong></td>
+									                  <td colspan="${dados.planet.width}">
+									                  </tr>
+													`);
+                                    }
+
+                                    for (var i = 1; i <= dados.planet.height; i++) {
+                                        $("#tb-body-s").append(`
+													 <tr>
+													 <td colspan="${dados.planet.width}">
+									                  <td style="background-color: green; width: 50px; height: 50px; text-align: center; vertical-align: middle;"><strong id="S${i}">S${i}</strong></td>
+									                  <td colspan="${dados.planet.width}">
+									                  </tr>
+													`);
+                                    }
+                                }
+
+                                for (var i = 0; i <= res.length - 1; i++) {
+                                    if (res[i].direction == "N") {
+                                        $("#E" + res[i].x).text(res[i].id + "[" + res[i].x + "]");
+                                        $("#N" + res[i].y).text(res[i].id + "[" + res[i].y + "]");
+                                        $("#E" + res[i].x).parent().css("background-color", "red");
+                                        $("#N" + res[i].y).parent().css("background-color", "red");
+                                    } else if (res[i].direction == "E") {
+                                        $("#E" + res[i].x).text(res[i].id + "[" + res[i].x + "]");
+                                        $("#N" + res[i].y).text(res[i].id + "[" + res[i].y + "]");
+                                        $("#E" + res[i].x).parent().css("background-color", "red");
+                                        $("#N" + res[i].y).parent().css("background-color", "red");
+                                    } else if (res[i].direction == "W") {
+                                        console.log(res[i].direction == "W");
+                                        $("#W" + res[i].x).text(res[i].id + "[" + res[i].x + "]");
+                                        $("#N" + res[i].y).text(res[i].id + "[" + res[i].y + "]");
+                                        $("#W" + res[i].x).parent().css("background-color", "red");
+                                        $("#N" + res[i].y).parent().css("background-color", "red");
+                                    } else if (res[i].direction == "S") {
+                                        $("#E" + res[i].x).text(res[i].id + "[" + res[i].x + "]");
+                                        $("#S" + res[i].y).text(res[i].id + "[" + res[i].y + "]");
+                                        $("#E" + res[i].x).parent().css("background-color", "red");
+                                        $("#S" + res[i].y).parent().css("background-color", "red");
+                                    }
+                                }
+
+
+                                $("#tb-body").append(
+                                    `<tr>
+										<td>${planeta.x}</td>
+										<td>${planeta.y}</td>
+										<td>${planeta.direction}</td>
+										<td>${planeta.commands}</td>
+										</tr>`);
+
+                                $("#form-comando")[0].reset();
+                            }
+                        }
+                    }
+                });
+            })
+        })
+
+    </script>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row" style="height: 100%;">
+        <div class="col-md-4">
+            <fieldset>
+                <legend>Central de Controle de Sondas</legend>
+            </fieldset>
+            <div class="row">
+                <div class="col-md-2">
+                    <label for="width" class="form-label">Width</label>
+                    <input type="text" class="form-control" id="width">
+                </div>
+                <div class="col-md-2">
+                    <label for="height" class="form-label">Height</label>
+                    <input type="text" class="form-control" id="height">
+                </div>
+            </div>
+            <form class="row g-3" id="form-comando">
+                <div class="col-md-2">
+                    <label for="posicaox" class="form-label">X</label>
+                    <input type="text" class="form-control" id="posicaox">
+                </div>
+                <div class="col-md-2">
+                    <label for="posicaoy" class="form-label">Y</label>
+                    <input type="text" class="form-control" id="posicaoy">
+                </div>
+                <div class="col-md-2">
+                    <label for="direcao" class="form-label">Direção</label>
+                    <select id="direcao" class="form-select">
+                        <option></option>
+                        <option>N</option>
+                        <option>W</option>
+                        <option>S</option>
+                        <option>E</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="comando" class="form-label">Comando</label>
+                    <input type="text" class="form-control" id="comando">
+                </div>
+                <div class="col-md-2" style="display: flex; align-items: end;">
+                    <button type="button" class="btn btn-primary" id="enviarComando">Enviar</button>
+                </div>
+            </form>
+            <table style="border-color: black; margin-left: auto; margin-right: auto;" border="1" class="table">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">X</th>
+                    <th scope="col">Y</th>
+                    <th scope="col">DIREÇÃO</th>
+                    <th scope="col">COMANDO</th>
+                </tr>
+                </thead>
+                <tbody id="tb-body">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-8" style="display: flex; align-items: center; justify-content: center;">
+            <table>
+                <tbody id="tb-body-n"/>
+                <tbody id="ponto-central"/>
+                <tbody id="tb-body-s"/>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

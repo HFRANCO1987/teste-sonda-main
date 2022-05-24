@@ -1,6 +1,5 @@
 package br.com.elo7.sonda.candidato.controller;
 
-import br.com.elo7.sonda.candidato.aspect.LogRequest;
 import br.com.elo7.sonda.candidato.controller.request.PlanetWithProbeRequest;
 import br.com.elo7.sonda.candidato.controller.response.ProbeResponse;
 import br.com.elo7.sonda.candidato.exceptions.CollisionError;
@@ -16,7 +15,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -31,7 +33,6 @@ public class ProbeController {
         this.probeService = probeService;
     }
 
-    @LogRequest
     @Operation(description = "API para criar um planeta e um sonda")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Retorna OK para planeta e sonda criada.",
