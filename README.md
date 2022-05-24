@@ -16,7 +16,7 @@ O projeto faz uso do **maven** para gerenciamento das dependências, o arquivo *
 as dependências utilizadas com suas devidas versões.
 
 ## Configurações do Spring JPA
-O BD utilizado foi **MYSQL;**, crie o banco e configure os dados de acesso no arquivo **application.properties**.
+O BD utilizado foi **MYSQL**, crie o banco e configure os dados de acesso no arquivo **application.properties**.
 
 ## Schema BD
 Dentro de **resources/bd** possui um esquema do banco utilizado, entretanto, o mesmo pode ser gerado automaticamente quando aplicação for iniciada.
