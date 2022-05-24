@@ -9,7 +9,6 @@ public class PlanetResponse {
     private Long id;
     private int width;
     private int height;
-
     public PlanetResponse(Planet planet) {
         this.id = planet.getId();
         this.width = planet.getWidth();

@@ -2,20 +2,23 @@ package br.com.elo7.sonda.candidato.service;
 
 import br.com.elo7.sonda.candidato.controller.request.InputDataRequest;
 import br.com.elo7.sonda.candidato.controller.request.ProbeRequest;
+import br.com.elo7.sonda.candidato.controller.response.ProbeResponse;
 import br.com.elo7.sonda.candidato.enuns.CommandEnum;
 import br.com.elo7.sonda.candidato.enuns.DirectionEnum;
+import br.com.elo7.sonda.candidato.exceptions.CollisionError;
 import br.com.elo7.sonda.candidato.exceptions.ServiceException;
 import br.com.elo7.sonda.candidato.exceptions.ValidationError;
 import br.com.elo7.sonda.candidato.model.Planet;
 import br.com.elo7.sonda.candidato.model.Probe;
-import br.com.elo7.sonda.candidato.persistence.PlanetRepository;
 import br.com.elo7.sonda.candidato.persistence.Probes;
 import br.com.elo7.sonda.candidato.utils.MessageUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,26 +44,45 @@ public class ProbeService {
 	 * @param inputDatRequest
 	 * @return
 	 */
-	public List<Probe> landProbes(InputDataRequest inputDatRequest) {
+	public List<ProbeResponse> landProbes(InputDataRequest inputDatRequest) {
 		this.validProbes(inputDatRequest);
 
 		Planet planet = this.planetService.findByWidthAndHeight(inputDatRequest.getPlanet());
 		this.planetService.save(planet);
 
-		this.validateCollisionBetweenProbes(inputDatRequest, planet);
+		List<Probe> convertedProbes = convertAndMoveProbes(inputDatRequest.getProbes(), planet);
 
-		List<Probe> convertedProbes = convertAndMoveProbes(inputDatRequest, planet);
-		convertedProbes.forEach(probe -> probes.save(probe));
+		this.validateCollisionBetweenProbes(convertedProbes, planet);
+
+		convertedProbes.stream().filter(probe -> !probe.getIsCollision()).forEach(probe -> probes.save(probe));
 		
-		return convertedProbes;
+		return this.toProbeInProbeResponse(convertedProbes, planet);
 	}
 
-	private void validateCollisionBetweenProbes(InputDataRequest inputDatRequest, Planet planet) {
+	private List<ProbeResponse> toProbeInProbeResponse(List<Probe> convertedProbes, Planet planet) {
+		List<ProbeResponse> allProbeResponse = new ArrayList<>();
+		convertedProbes.forEach(probe -> {
+			if (probe.getIsCollision()){
+				allProbeResponse.add(new ProbeResponse(probe, planet,
+						"Probe in collision in planet " + planet + " in axisX : " + probe.getX() + " and axisY :" + probe.getY()));
+			}else{
+				allProbeResponse.add(new ProbeResponse(probe, "Successful landing!"));
+			}
+		});
+
+		if (convertedProbes.stream().filter(probe -> probe.getIsCollision()).count() >= 1){
+			throw new ServiceException(new CollisionError(allProbeResponse));
+		}
+
+		return allProbeResponse;
+	}
+
+	private void validateCollisionBetweenProbes(List<Probe> probes, Planet planet) {
 		if (this.isPlanetCreated(planet)){
-			for (ProbeRequest probeRequest : inputDatRequest.getProbes()){
-				Probe probe = this.findByPlanetAndXAndYAndDirection(planet, probeRequest.getX(), probeRequest.getY(), probeRequest.getDirection());
-				if (probe != null){
-					probeRequest.setCollision(Boolean.TRUE);
+			for (Probe probe : probes){
+				Probe probeExist = this.findByPlanetAndXAndYAndDirection(planet, probe.getX(), probe.getY(), probe.getDirection());
+				if (probeExist != null){
+					probe.setIsCollision(Boolean.TRUE);
 				}
 			}
 		}
@@ -111,10 +133,9 @@ public class ProbeService {
 	 * @param planet
 	 * @return
 	 */
-	private List<Probe> convertAndMoveProbes(InputDataRequest input, Planet planet) {
-		return input.getProbes()
+	private List<Probe> convertAndMoveProbes(List<ProbeRequest> probes, Planet planet) {
+		return probes
 						.stream()
-						.filter(probeRequest -> !probeRequest.getCollision())
 						.map(probeDto -> {
 							Probe probe = new Probe(probeDto, planet);
 							moveProbeWithAllCommands(probe, probeDto);
@@ -128,8 +149,8 @@ public class ProbeService {
 		}
 	}
 
-	public Probe findByPlanetAndXAndYAndDirection(Planet planet, int x, int y, String direction){
-		Optional<Probe> optionalProbe = this.probes.findByPlanetIdAndXAndYAndDirection(planet.getId(), x, y, DirectionEnum.getDirectionEnum(direction));
+	public Probe findByPlanetAndXAndYAndDirection(Planet planet, int x, int y, DirectionEnum direction){
+		Optional<Probe> optionalProbe = this.probes.findByPlanetIdAndXAndYAndDirection(planet.getId(), x, y, direction);
 		if (optionalProbe.isPresent())
 			return optionalProbe.get();
 

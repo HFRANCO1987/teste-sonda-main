@@ -9,7 +9,10 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<StandardError> serviceException(ServiceException e) {
-        return ResponseEntity.status(e.getValidationError().getStatus()).body(e.getValidationError());
+        if (e.getValidationError() != null){
+            return ResponseEntity.status(e.getValidationError().getStatus()).body(e.getValidationError());
+        }
+        return ResponseEntity.status(e.getCollisionError().getStatus()).body(e.getCollisionError());
     }
 
 }

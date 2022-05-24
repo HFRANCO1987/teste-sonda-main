@@ -23,9 +23,13 @@ public class Probe {
     private int y;
     @Enumerated(EnumType.STRING)
     private DirectionEnum direction;
+
     @ManyToOne
     @JoinColumn(name = "id_planet")
     private Planet planet;
+
+    @Transient
+    private Boolean isCollision = Boolean.FALSE;
 
     public Probe() {
     }
