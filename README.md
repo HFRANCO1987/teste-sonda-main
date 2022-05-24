@@ -1,7 +1,7 @@
 # Informações de configuração
 
 ## Requisitos obrigatórios
-Desenvolvimento realizado com Java, framework Spring Boot e banco de dados PostgreSQL.
+Desenvolvimento realizado com Java, framework Spring Boot e banco de dados MYSQL.
 
 **Java        (11)**
 
