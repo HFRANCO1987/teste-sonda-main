@@ -1,16 +1,14 @@
 package br.com.elo7.sonda.candidato.persistence;
 
-import br.com.elo7.sonda.candidato.controller.request.ProbeRequest;
 import br.com.elo7.sonda.candidato.enuns.DirectionEnum;
 import br.com.elo7.sonda.candidato.model.Probe;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface Probes extends JpaRepository<Probe, Long> {
+public interface ProbeRepository extends JpaRepository<Probe, Long> {
 
     Probe save(Probe probe);
 

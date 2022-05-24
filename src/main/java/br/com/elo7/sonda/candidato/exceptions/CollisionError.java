@@ -11,8 +11,7 @@ public class CollisionError extends StandardError {
 	private List<ProbeResponse> errors = new ArrayList<>();
 
 	public CollisionError(List<ProbeResponse> errors) {
-		super();
-		super.setStatus(HttpStatus.CONFLICT.value());
+		super(HttpStatus.CONFLICT.value(), "Collision when placing probe!");
 		this.errors = errors;
 	}
 

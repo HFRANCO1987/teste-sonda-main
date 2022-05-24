@@ -8,4 +8,11 @@ public class PlanetaRequest {
     private int width;
     private int height;
 
+    public PlanetaRequest() {
+    }
+
+    public PlanetaRequest(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 }

@@ -1,12 +1,11 @@
 package br.com.elo7.sonda.candidato.controller;
 
-import br.com.elo7.sonda.candidato.controller.request.InputDataRequest;
-import br.com.elo7.sonda.candidato.controller.response.PlanetResponse;
+import br.com.elo7.sonda.candidato.aspect.LogRequest;
+import br.com.elo7.sonda.candidato.controller.request.PlanetWithProbeRequest;
 import br.com.elo7.sonda.candidato.controller.response.ProbeResponse;
 import br.com.elo7.sonda.candidato.exceptions.CollisionError;
 import br.com.elo7.sonda.candidato.exceptions.StandardError;
 import br.com.elo7.sonda.candidato.exceptions.ValidationError;
-import br.com.elo7.sonda.candidato.model.Probe;
 import br.com.elo7.sonda.candidato.service.ProbeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,13 +24,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/planet-with-probes")
 @Tag(name = "/planet-with-probes", description = "Registrar planetas e sondas")
-public class PlanetAndProbeController {
+public class ProbeController {
     private ProbeService probeService;
 
-    public PlanetAndProbeController(ProbeService probeService) {
+    public ProbeController(ProbeService probeService) {
         this.probeService = probeService;
     }
 
+    @LogRequest
     @Operation(description = "API para criar um planeta e um sonda")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Retorna OK para planeta e sonda criada.",
@@ -47,8 +47,8 @@ public class PlanetAndProbeController {
 
     })
     @PostMapping
-    public ResponseEntity<List<ProbeResponse>> register(@RequestBody InputDataRequest inputDto) {
-        return new ResponseEntity<>(probeService.landProbes(inputDto), HttpStatus.CREATED);
+    public ResponseEntity<List<ProbeResponse>> register(@RequestBody PlanetWithProbeRequest planetWithProbeRequest) {
+        return new ResponseEntity<>(probeService.landProbes(planetWithProbeRequest), HttpStatus.CREATED);
     }
 
 }

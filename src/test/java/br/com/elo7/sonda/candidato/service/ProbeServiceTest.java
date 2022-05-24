@@ -1,6 +1,7 @@
 package br.com.elo7.sonda.candidato.service;
 
-import br.com.elo7.sonda.candidato.controller.request.InputDataRequest;
+import br.com.elo7.sonda.candidato.controller.request.PlanetWithProbeRequest;
+import br.com.elo7.sonda.candidato.controller.request.PlanetaRequest;
 import br.com.elo7.sonda.candidato.controller.request.ProbeRequest;
 import br.com.elo7.sonda.candidato.enuns.DirectionEnum;
 import br.com.elo7.sonda.candidato.exceptions.ServiceException;
@@ -113,7 +114,7 @@ public class ProbeServiceTest {
 
 	@Test
 	public void should_validate_if_probe_is_null() {
-		InputDataRequest inputDTO = new InputDataRequest();
+		PlanetWithProbeRequest inputDTO = new PlanetWithProbeRequest();
 		try{
 			subject.landProbes(inputDTO);
 		}catch (NullPointerException e){
@@ -123,24 +124,25 @@ public class ProbeServiceTest {
 	@Test
 	public void should_validate_if_probe_is_empty() {
 		try{
-			InputDataRequest inputDTO = new InputDataRequest();
+			PlanetWithProbeRequest inputDTO = new PlanetWithProbeRequest();
 			inputDTO.setProbes(new ArrayList<>());
 			subject.landProbes(inputDTO);
 		}catch (ServiceException serviceException){
-			assertEquals("Nenhum Probe informada para posicionamento!", serviceException.getValidationError().getMsg());
+			assertEquals("No Probe reported for placement!", serviceException.getValidationError().getMsg());
 		}
 	}
 
 	@Test
 	public void deveValidarSeDirecaoDoProbeEstaVazio() {
 		try{
-			InputDataRequest inputDTO = new InputDataRequest();
+			PlanetWithProbeRequest planetWithProbeRequest = new PlanetWithProbeRequest();
+			planetWithProbeRequest.setPlanet(new PlanetaRequest(5,5));
 			ProbeRequest probeDTO = new ProbeRequest();
-			inputDTO.setProbes(new ArrayList<>());
-			inputDTO.getProbes().add(probeDTO);
-			subject.landProbes(inputDTO);
+			planetWithProbeRequest.setProbes(new ArrayList<>());
+			planetWithProbeRequest.getProbes().add(probeDTO);
+			subject.landProbes(planetWithProbeRequest);
 		}catch (ServiceException serviceException){
-			assertEquals("Direção é um campo obrigatório!", serviceException.getValidationError().getMsg());
+			assertEquals("Direction is field required!", serviceException.getValidationError().getMsg());
 		}
 	}
 
@@ -148,27 +150,29 @@ public class ProbeServiceTest {
 	public void should_validate_if_direction_probe_is_invalid() {
 		ProbeRequest probeDTO = new ProbeRequest();
 		try{
-			InputDataRequest inputDTO = new InputDataRequest();
-			inputDTO.setProbes(new ArrayList<>());
+			PlanetWithProbeRequest planetWithProbeRequest = new PlanetWithProbeRequest();
+			planetWithProbeRequest.setPlanet(new PlanetaRequest(5,5));
+			planetWithProbeRequest.setProbes(new ArrayList<>());
 			probeDTO.setDirection("H");
-			inputDTO.getProbes().add(probeDTO);
-			subject.landProbes(inputDTO);
+			planetWithProbeRequest.getProbes().add(probeDTO);
+			subject.landProbes(planetWithProbeRequest);
 		}catch (ServiceException serviceException){
-			assertEquals(probeDTO.getDirection() + " é uma direção invalida!", serviceException.getValidationError().getMsg());
+			assertEquals(probeDTO.getDirection() + " it's an invalid direction!", serviceException.getValidationError().getMsg());
 		}
 	}
 
 	@Test
 	public void should_validate_if_command_probe_is_empty() {
 		try{
-			InputDataRequest inputDTO = new InputDataRequest();
+			PlanetWithProbeRequest planetWithProbeRequest = new PlanetWithProbeRequest();
+			planetWithProbeRequest.setPlanet(new PlanetaRequest(5,5));
 			ProbeRequest probeDTO = new ProbeRequest();
-			inputDTO.setProbes(new ArrayList<>());
+			planetWithProbeRequest.setProbes(new ArrayList<>());
 			probeDTO.setDirection("N");
-			inputDTO.getProbes().add(probeDTO);
-			subject.landProbes(inputDTO);
+			planetWithProbeRequest.getProbes().add(probeDTO);
+			subject.landProbes(planetWithProbeRequest);
 		}catch (ServiceException serviceException){
-			assertEquals("Comando é um campo obrigatório!", serviceException.getValidationError().getMsg());
+			assertEquals("Command is field required!", serviceException.getValidationError().getMsg());
 		}
 	}
 
@@ -177,14 +181,72 @@ public class ProbeServiceTest {
 	public void should_validate_if_command_probe_is_invalid() {
 		ProbeRequest probeDTO = new ProbeRequest();
 		try{
-			InputDataRequest inputDTO = new InputDataRequest();
-			inputDTO.setProbes(new ArrayList<>());
+			PlanetWithProbeRequest planetWithProbeRequest = new PlanetWithProbeRequest();
+			planetWithProbeRequest.setPlanet(new PlanetaRequest(5,5));
+			planetWithProbeRequest.setProbes(new ArrayList<>());
 			probeDTO.setDirection("N");
 			probeDTO.setCommands("LMRMMH");
-			inputDTO.getProbes().add(probeDTO);
-			subject.landProbes(inputDTO);
+			planetWithProbeRequest.getProbes().add(probeDTO);
+			subject.landProbes(planetWithProbeRequest);
 		}catch (ServiceException serviceException){
-			assertEquals("H" + " é um comando invalido!", serviceException.getValidationError().getMsg());
+			assertEquals("H" + " it's an invalid command!", serviceException.getValidationError().getMsg());
 		}
 	}
+
+	@Test
+	public void should_fill_x_and_y_axis_with_value_greater_than_zero() {
+		ProbeRequest probeDTO = new ProbeRequest();
+		try{
+			PlanetWithProbeRequest planetWithProbeRequest = new PlanetWithProbeRequest();
+			planetWithProbeRequest.setPlanet(new PlanetaRequest());
+			planetWithProbeRequest.setProbes(new ArrayList<>());
+			planetWithProbeRequest.getProbes().add(probeDTO);
+			subject.landProbes(planetWithProbeRequest);
+		}catch (ServiceException serviceException){
+			assertEquals("xAxis and yAxis cannot be zero!", serviceException.getValidationError().getMsg());
+		}
+	}
+
+	@Test
+	public void should_fill_x_and_y_axis_with_value_greater_than_zero_not_null() {
+		ProbeRequest probeDTO = new ProbeRequest();
+		try{
+			PlanetWithProbeRequest planetWithProbeRequest = new PlanetWithProbeRequest();
+			planetWithProbeRequest.setProbes(new ArrayList<>());
+			planetWithProbeRequest.getProbes().add(probeDTO);
+			subject.landProbes(planetWithProbeRequest);
+		}catch (ServiceException serviceException){
+			assertEquals("xAxis and yAxis cannot be zero!", serviceException.getValidationError().getMsg());
+		}
+	}
+
+
+	@Test
+	public void should_fill_x_axis_with_value_greater_than_zero() {
+		ProbeRequest probeDTO = new ProbeRequest();
+		try{
+			PlanetWithProbeRequest planetWithProbeRequest = new PlanetWithProbeRequest();
+			planetWithProbeRequest.setPlanet(new PlanetaRequest(0,5));
+			planetWithProbeRequest.setProbes(new ArrayList<>());
+			planetWithProbeRequest.getProbes().add(probeDTO);
+			subject.landProbes(planetWithProbeRequest);
+		}catch (ServiceException serviceException){
+			assertEquals("xAxis cannot be zero!", serviceException.getValidationError().getMsg());
+		}
+	}
+
+	@Test
+	public void should_fill_y_axis_with_value_greater_than_zero() {
+		ProbeRequest probeDTO = new ProbeRequest();
+		try{
+			PlanetWithProbeRequest planetWithProbeRequest = new PlanetWithProbeRequest();
+			planetWithProbeRequest.setPlanet(new PlanetaRequest(5,0));
+			planetWithProbeRequest.setProbes(new ArrayList<>());
+			planetWithProbeRequest.getProbes().add(probeDTO);
+			subject.landProbes(planetWithProbeRequest);
+		}catch (ServiceException serviceException){
+			assertEquals("yAxis cannot be zero!", serviceException.getValidationError().getMsg());
+		}
+	}
+
 }
